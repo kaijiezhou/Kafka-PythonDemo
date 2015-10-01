@@ -9,7 +9,8 @@ def produceDemo(configs):
         topic="computer"+str(random.randint(0,1))
         key=keys[random.randint(0,1)]
         pec=str(random.randint(0,100))
-        producer.produce(topic,key,pec)
+        #producer.produce(topic,key,pec)
+        producer.produce(topic,pec)
         print("Produced: "+topic+"."+key+"="+pec)
 
 def consumeDemo(configs):
