@@ -1,6 +1,7 @@
+import ConsumerDemo, ProducerDemo, sys, threading, random, JsonParser, LogIngester
 __author__ = 'kaijiezhou'
 
-import ConsumerDemo,ProducerDemo,sys,threading,random,JsonParser
+
 
 def produceDemo(configs):
     producer=ProducerDemo.DemoProducer(configs)
@@ -9,8 +10,8 @@ def produceDemo(configs):
         topic="computer"+str(random.randint(0,1))
         key=keys[random.randint(0,1)]
         pec=str(random.randint(0,100))
-        #producer.produce(topic,key,pec)
-        producer.produce(topic,pec)
+        producer.keyedProduce(topic,key,pec)
+        #producer.produce(topic,pec)
         print("Produced: "+topic+"."+key+"="+pec)
 
 def consumeDemo(configs):
@@ -28,5 +29,8 @@ elif args[1]=="consumer":
     configs2= JsonParser.parseJson("consumer2.json")
     consumeDemo(configs1)
     consumeDemo(configs2)
+elif args[1]=="ingest":
+    configs=JsonParser.parseJson("producer.json")
+    LogIngester.LogIngester(args[2],configs).ingest()
 else:
     print("Choose a Mode, producer or consumer")
