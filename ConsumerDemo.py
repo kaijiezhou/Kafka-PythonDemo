@@ -17,6 +17,18 @@ class DemoConsumer(object):
                 #print("[%s.consumer] %s-part-%d: value=%s" % (self.configs["group_id"],topic,message[0],message[1]))
                 print("[%s.consumer] %s-part-%d: key=%s value=%s" % (self.configs["group_id"],topic, message[0], message[1].key,message[1].value))
 
+class GrabConsumer(object):
+    def __init__(self,configs):
+        self.client=KafkaClient(configs["broker_list"].split(","))
+        self.group_id=configs["group_id"]
+
+    def consumeLatest(self,topic):
+        consumer = SimpleConsumer(topic=topic,group=self.group_id,client=self.client,auto_commit=True)
+        consumer.get_message(timeout=1)
+        consumer.stop()
+
+
+
 if __name__=="main":
     args=sys.argv
     configFile=open(args[0])

@@ -8,7 +8,7 @@ class LogIngester():
         self.path=path
         self.producer=ProducerDemo.DemoProducer(producerConfigs)
 
-    #Return [topic, msg]
+    #Return [topic,topic, msg]
     def parseLine(self,line):
         return line.split(",",2)
 
