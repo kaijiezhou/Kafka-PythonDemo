@@ -14,17 +14,28 @@ class DemoProducer(object):
     def produce(self,topic, msg):
         kafka=KafkaClient(self.configs["broker_list"].split(","))
         producer=SimpleProducer(kafka)
-        producer.send_messages(topic,msg)
+        #producer.send_messages(topic,msg)
+        undone=True
+        while(undone):
+            try:
+                producer.send_messages(topic, msg)
+                undone=False
+            except LeaderNotAvailableError:
+                sleep(10)
+                print("LeaderNotAvailableError")
+                pass
 
-    def produce(self,topic, key, value):
+    def keyedProduce(self,topic, key, value):
         kafka=KafkaClient(self.configs["broker_list"].split(","))
-        keyedProducer=KeyedProducer(kafka)
+        keyedProducer=KeyedProducer(kafka,async=True)
         undone=True
         while(undone):
             try:
                 keyedProducer.send_messages(topic, key, value)
                 undone=False
             except LeaderNotAvailableError:
+                sleep(10)
+                print("LeaderNotAvailableError")
                 pass
             #keyedProducer.send_messages(topic, key, value)
 
